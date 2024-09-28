@@ -1,0 +1,6 @@
+[run]
+source = qaroni
+omit = 
+    tests/*
+    autoapp.py
+
