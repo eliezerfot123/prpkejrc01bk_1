@@ -4,7 +4,7 @@ import logging
 import sys
 
 from flask import Flask, render_template
-
+from environs import Env
 from qaroni import commands
 from apps.user import *
 from qaroni.extensions import (
@@ -12,6 +12,7 @@ from qaroni.extensions import (
     cache,
     db,
     migrate,
+    mail
 )
 
 from apps.user.views import users_blueprint_api
@@ -24,6 +25,17 @@ def create_app(config_object="qaroni.settings"):
     """
     app = Flask(__name__.split(".")[0])
     app.config.from_object(config_object)
+
+    # configure mail
+    env = Env()
+    env.read_env()
+    app.config["MAIL_SERVER"] = env.str("MAIL_SERVER")
+    app.config["MAIL_PORT"] = env.int("MAIL_PORT")
+    app.config["MAIL_USERNAME"] = env.str("MAIL_USERNAME")
+    app.config["MAIL_PASSWORD"] = env.str("MAIL_PASSWORD")
+    app.config["MAIL_USE_TLS"] = env.bool("MAIL_USE_TLS")
+    app.config["MAIL_USE_SSL"] = env.bool("MAIL_USE_SSL")
+
     register_extensions(app)
     register_blueprints(app)
     register_errorhandlers(app)
@@ -39,6 +51,7 @@ def register_extensions(app):
     db.init_app(app)
     bcrypt.init_app(app)
     migrate.init_app(app, db)
+    mail.init_app(app)
     return None
 
 

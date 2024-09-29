@@ -2,7 +2,7 @@ from qaroni.database import db
 from sqlalchemy.orm import Session
 from apps.user.models import User
 from werkzeug.security import generate_password_hash, check_password_hash
-
+from qaroni.mail import send_mail
 
 class CreateUserDAO:
     def __init__(self) -> None:
@@ -18,6 +18,9 @@ class CreateUserDAO:
         user = self.model(email=email, first_name=first_name, last_name=last_name, role=type)
         user.password = generate_password_hash(password)  # hash password
         user.save(commit=True)
+
+        # send email
+        send_mail(email, "Welcome", f"Welcome {user.email} to Qaroni.")
         return user
     
 
