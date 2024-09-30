@@ -7,6 +7,7 @@ from sqlalchemy.ext.hybrid import hybrid_property
 
 from qaroni.database import Column, BaseModel, db, relationship, reference_col
 from qaroni.extensions import bcrypt
+from werkzeug.security import generate_password_hash, check_password_hash
 
 
 
@@ -33,6 +34,9 @@ class User(UserMixin, BaseModel):
         """Set password."""
         self._password = bcrypt.generate_password_hash(value)
 
+    def set_password(self, secret):
+        self._password = generate_password_hash(secret)
+
     def check_password(self, value):
         """Check password."""
         return bcrypt.check_password_hash(self._password, value)
@@ -44,4 +48,5 @@ class User(UserMixin, BaseModel):
 
     def __repr__(self):
         """Represent instance as a unique string."""
-        return f"<User({self.username!r})>"
+        return f"<User({self.email!r})>"
+

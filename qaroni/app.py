@@ -12,7 +12,8 @@ from qaroni.extensions import (
     cache,
     db,
     migrate,
-    mail
+    mail,
+    jwt
 )
 
 from apps.user.views import users_blueprint_api
@@ -35,6 +36,8 @@ def create_app(config_object="qaroni.settings"):
     app.config["MAIL_PASSWORD"] = env.str("MAIL_PASSWORD")
     app.config["MAIL_USE_TLS"] = env.bool("MAIL_USE_TLS")
     app.config["MAIL_USE_SSL"] = env.bool("MAIL_USE_SSL")
+    app.config['JWT_SECRET_KEY'] = env.str("JWT_SECRET_KEY") 
+
 
     register_extensions(app)
     register_blueprints(app)
@@ -52,6 +55,7 @@ def register_extensions(app):
     bcrypt.init_app(app)
     migrate.init_app(app, db)
     mail.init_app(app)
+    jwt.init_app(app)
     return None
 
 

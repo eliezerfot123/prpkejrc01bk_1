@@ -1,14 +1,18 @@
 # -*- coding: utf-8 -*-
 """User views."""
-from flask import Blueprint, request
+import jwt
+from flask import Blueprint, request, jsonify
 from qaroni.logs import log_info
-from apps.user.controllers import RegisterUserController
+from apps.user.controllers import RegisterUserController, LoginUserController
 from qaroni.handler_error import HandlerException
+from apps.user.models import User
+from flask_jwt_extended import create_access_token
+
 
 users_blueprint_api = Blueprint("users", __name__)
 
 
-@users_blueprint_api.route("/api/users/register/", methods=["POST"])
+@users_blueprint_api.route("/api/accounts/register/", methods=["POST"])
 def register():
     """
     Register a new user.
@@ -34,16 +38,41 @@ def register():
     if not data.get("type"):
         return HandlerException.STATUS400_DATA_NOT_FOUND("type is required")
     if data.get("type") not in type_user:
-        return HandlerException.STATUS400_DATA_NOT_FOUND("type must be director or librarians")
-    
+        return HandlerException.STATUS400_DATA_NOT_FOUND(
+            "type must be director or librarians"
+        )
+
     ctrl = RegisterUserController()
     result = ctrl.execute(data)
     if result is None:
         return HandlerException.STATUS400_DATA_NOT_FOUND("User already exists")
     return HandlerException.STATUS200(result)
 
+
+
+@users_blueprint_api.route("/api/accounts/login/", methods=["POST"])
+def login():
+    email = request.json.get('email')
+    password = request.json.get('password')
+    data = request.get_json()
+
+    if not email:
+        return jsonify({'message': 'Email is required'}), 400
+    if not password:
+        return jsonify({'message': 'Password is required'}), 400
     
-@users_blueprint_api.route("/actuator/health", methods=['GET'])
+    call = LoginUserController()
+    result = call.execute(data)
+    if not result:
+        return jsonify({'message': 'Invalid credentials'}), 400
+    else:
+        access_token = create_access_token(identity=email)
+        return jsonify({'access_token': access_token}), 200
+
+
+
+
+@users_blueprint_api.route("/actuator/health", methods=["GET"])
 def actuator():
     """
     Actuator health check.
@@ -57,8 +86,8 @@ def actuator():
         ip_address=request.remote_addr,
         client=request.environ["HTTP_USER_AGENT"],
         path=request.path,
-        result="UP"
+        result="UP",
     )
     if data:
-        print("Result:",data)
+        print("Result:", data)
     return {"status": "UP"}
