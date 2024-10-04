@@ -1,3 +1,3 @@
-from .books import Books
+from .books import Book, Author
 
-__all__ = ["Books"]
+__all__ = ["Book", "Author"]

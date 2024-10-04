@@ -7,6 +7,7 @@ from apps.user.controllers import RegisterUserController, LoginUserController
 from qaroni.handler_error import HandlerException
 from apps.user.models import User
 from flask_jwt_extended import create_access_token
+from flask_jwt_extended import jwt_required
 
 
 users_blueprint_api = Blueprint("users", __name__)

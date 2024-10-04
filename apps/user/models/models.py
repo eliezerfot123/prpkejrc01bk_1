@@ -17,7 +17,7 @@ class User(UserMixin, BaseModel):
     __tablename__ = "users"
 
     email = Column(db.String(80), unique=True, nullable=False)
-    _password = Column("password", db.String(120))
+    _password = Column("password", db.String(256))
     first_name = Column(db.String(30), nullable=True)
     last_name = Column(db.String(30), nullable=True)
     role = Column(db.String(10), nullable=True)

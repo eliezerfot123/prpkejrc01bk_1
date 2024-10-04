@@ -7,3 +7,12 @@ class CallBooksServices:
 
     def execute(self):
         return self.dao.get_all()
+    
+    def create_data(self, request_data):
+        return self.dao.create(**request_data)
+    
+    def update_data(self, id, request_data):
+        return self.dao.update(id, **request_data)
+    
+    def delete_data(self, id):
+        return self.dao.delete(id)

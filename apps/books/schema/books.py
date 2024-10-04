@@ -6,7 +6,8 @@ class BooksSchema(Schema):
     image_url = fields.Str()
     category = fields.Str()
     user_id = fields.Str()
+    authors = fields.List(fields.Str())
 
     class Meta:
-        fields = ("title", "description", "image_url", "category", "user_id")
+        fields = ("title", "description", "image_url", "category", "user_id", "authors")
         

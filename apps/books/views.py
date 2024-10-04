@@ -2,10 +2,8 @@
 """User views."""
 import jwt
 from flask import Blueprint, request, jsonify
-from qaroni.logs import log_info
-from qaroni.handler_error import HandlerException
-from apps.books.models import Books
 from apps.books.controllers import BooksController
+from flask_jwt_extended import jwt_required
 
 
 books_blueprint_api = Blueprint("books", __name__)
@@ -45,3 +43,35 @@ def get_books():
         }), 500
 
 
+@books_blueprint_api.route('/api/books/', methods=['POST'])
+@jwt_required()
+def create_book():
+    # Lógica para crear un nuevo libro
+    
+    data = request.get_json()
+    if not data:
+        return jsonify({'message': 'No input data provided'}), 400
+    
+    ctrl = BooksController()
+    result = ctrl.create_data(data)
+    if result is None:
+        return jsonify({'message': 'Book already exists'}), 400
+    
+    return jsonify({'message': 'Book created successfully'}), 201
+
+
+@books_blueprint_api.route('/api/books/<int:book_id>/', methods=['PUT'])
+@jwt_required()
+def update_book(book_id):
+    # Lógica para actualizar un libro
+    
+    data = request.get_json()
+    if not data:
+        return jsonify({'message': 'No input data provided'}), 400
+    
+    ctrl = BooksController()
+    result = ctrl.update_data(book_id, data)
+    if result is None or result is False:
+        return jsonify({'message': 'Book does not exist'}), 400
+    
+    return jsonify({'message': 'Book updated successfully'}), 200
