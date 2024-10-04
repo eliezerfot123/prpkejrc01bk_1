@@ -17,12 +17,12 @@ class CreateUserDAO:
         # validate data no exists
         if self.validate_user(email):
             return None
-        user = self.model(email=email, first_name=first_name, last_name=last_name, role=type)
-        user.password = bcrypt.generate_password_hash(password)  # hash password
+        hash_password = generate_password_hash(password)
+        user = self.model(email=email, first_name=first_name, last_name=last_name, role=type, password=hash_password)
         user.save(commit=True)
 
         # send email
-        send_mail(email, "Welcome", f"Welcome {user.email} to Qaroni.")
+        #send_mail(email, "Welcome", f"Welcome {user.email} to Qaroni.")
         return user
     
 

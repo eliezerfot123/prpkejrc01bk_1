@@ -12,6 +12,7 @@ from flask_mail import Mail
 from flask_jwt_extended import JWTManager
 
 
+
 bcrypt = Bcrypt()
 csrf_protect = CSRFProtect()
 login_manager = LoginManager()

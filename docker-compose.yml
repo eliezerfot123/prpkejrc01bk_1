@@ -1,13 +1,11 @@
 version: "3.8"
 
 x-build-args: &build_args
-  INSTALL_PYTHON_VERSION: "3.12.3"
-  INSTALL_NODE_VERSION: ""
+  INSTALL_PYTHON_VERSION: "3.12"
 
 x-default-volumes: &default_volumes
   volumes:
     - ./:/app
-    - node-modules:/app/node_modules
     - ./dev.db:/tmp/dev.db
 
 services:
@@ -20,7 +18,6 @@ services:
     image: "qaroni-development"
     ports:
       - "8080:5000"
-      - "2992:2992"
     <<: *default_volumes
 
   flask-prod:

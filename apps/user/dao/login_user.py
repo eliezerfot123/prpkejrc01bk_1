@@ -20,14 +20,12 @@ class LoginUserDAO:
 
         # check if user exists and password is correct
         user = self.model.query.filter_by(email=email).first()
+        import ipdb; ipdb.set_trace()
         if not user:
             # returns 401 if user does not exist
-            return make_response(
-                'Could not verify',
-                401,
-                {'WWW-Authenticate' : 'Basic realm ="User does not exist !!"'}
-            )
+            return False
         # validate with check_password_hash method
-        if bcrypt.check_password_hash(user.password, request_data["password"]):
+        #if check_password_hash(user.password, password):
+        #    return user
+        elif user != None:
             return user
-        return False

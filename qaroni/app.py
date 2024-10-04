@@ -13,10 +13,14 @@ from qaroni.extensions import (
     db,
     migrate,
     mail,
-    jwt
+    jwt,
 )
 
 from apps.user.views import users_blueprint_api
+from apps.books.views import books_blueprint_api
+from flasgger import Swagger
+from qaroni.swagger_template import template as swagger_template
+
 
 
 def create_app(config_object="qaroni.settings"):
@@ -56,12 +60,14 @@ def register_extensions(app):
     migrate.init_app(app, db)
     mail.init_app(app)
     jwt.init_app(app)
+    Swagger(app, template=swagger_template)
     return None
 
 
 def register_blueprints(app):
     """Register Flask blueprints."""
     app.register_blueprint(users_blueprint_api)
+    app.register_blueprint(books_blueprint_api)
     return None
 
 

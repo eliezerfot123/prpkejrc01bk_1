@@ -14,11 +14,40 @@ users_blueprint_api = Blueprint("users", __name__)
 
 @users_blueprint_api.route("/api/accounts/register/", methods=["POST"])
 def register():
-    """
-    Register a new user.
-
-    :return: A dictionary containing the status of the registration.
-    :rtype: dict
+    """Get service status
+    ---
+    tags:
+      - Get service status
+    parameters:
+    - name: fintechid
+      in: header
+      type: string
+      required: true
+      description: The ID of fintech
+    - name: bank
+      in: query
+      type: string
+      required: true
+      description: The ID of bank
+    - name: services
+      in: query
+      type: string
+      required: true
+      description: service that allows interaction
+    - name: event
+      in: query
+      type: string
+      required: true
+      description: event create for the services
+    responses:
+      200:
+        description: Success. Status of services
+        schema:
+          $ref: '#/definitions/SimpleResponseSchema'
+      400:
+        description: Bad request or missing parameters.
+        schema:
+          $ref: '#/definitions/ErrorResponseSchema'
     """
     # validate data from body
     data = request.get_json()
