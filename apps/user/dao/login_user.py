@@ -20,7 +20,6 @@ class LoginUserDAO:
 
         # check if user exists and password is correct
         user = self.model.query.filter_by(email=email).first()
-        import ipdb; ipdb.set_trace()
         if not user:
             # returns 401 if user does not exist
             return False

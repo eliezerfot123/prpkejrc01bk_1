@@ -13,48 +13,20 @@ books_blueprint_api = Blueprint("books", __name__)
 
 @books_blueprint_api.route("/api/books/", methods=["GET"])
 def get_books():
-    """Get service status
+    """Get all books
     ---
     tags:
-      - Get service status
-    parameters:
-    - name: fintechid
-      in: header
-      type: string
-      required: true
-      description: The ID of fintech
-    - name: bank
-      in: query
-      type: string
-      required: true
-      description: The ID of bank
-    - name: services
-      in: query
-      type: string
-      required: true
-      description: service that allows interaction
-    - name: event
-      in: query
-      type: string
-      required: true
-      description: event create for the services
+      - Get books
     responses:
       200:
-        description: Success. Status of services
+        message: Success. Status of services
         schema:
           id: SimpleResponseSchema
           properties:
-            statusResponse:
+            data:
               type: object
-              properties:
-                statusCode:
-                  type: string
-                  description: Response code
-                  default: "200"
-                status:
-                  type: string
-                  description: Response message
-
+            message:
+              type: string
     """
     try:
         #books = Books().get_all()

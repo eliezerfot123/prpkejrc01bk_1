@@ -14,36 +14,47 @@ users_blueprint_api = Blueprint("users", __name__)
 
 @users_blueprint_api.route("/api/accounts/register/", methods=["POST"])
 def register():
-    """Get service status
+    """Register user
     ---
     tags:
-      - Get service status
+      - Register user
+
     parameters:
-    - name: fintechid
-      in: header
-      type: string
-      required: true
-      description: The ID of fintech
-    - name: bank
-      in: query
-      type: string
-      required: true
-      description: The ID of bank
-    - name: services
-      in: query
-      type: string
-      required: true
-      description: service that allows interaction
-    - name: event
-      in: query
-      type: string
-      required: true
-      description: event create for the services
+    - in: body
+      name: body
+      description: User data
+      schema:
+        properties:
+          email:
+            type: string
+          password:
+            type: string
+          first_name:
+            type: string
+          last_name:
+            type: string
+          type:
+            type: string
+            enum:
+              - director
+              - librarians
+        example:
+          email: 9HsZB@example.com
+          password: password
+          first_name: John
+          last_name: Doe
+          type: director
+
     responses:
       200:
-        description: Success. Status of services
+        message: Success
         schema:
-          $ref: '#/definitions/SimpleResponseSchema'
+          id: SimpleResponseSchema
+          properties:
+            message:
+              type: string
+            200:
+              type: object
       400:
         description: Bad request or missing parameters.
         schema:
@@ -81,6 +92,36 @@ def register():
 
 @users_blueprint_api.route("/api/accounts/login/", methods=["POST"])
 def login():
+    """Login user
+    ---
+    tags:
+      - Login user
+
+    parameters:
+    - in: body
+      name: body
+      description: User data
+      schema:
+        properties:
+          email:
+            type: string
+          password:
+            type: string
+        example:
+          email: 9HsZB@example.com
+          password: password
+
+    responses:
+      200:
+        message: Success
+        schema:
+          id: SimpleResponseSchema
+          properties:
+            message:
+              type: string
+            200:
+              type: object
+    """
     email = request.json.get('email')
     password = request.json.get('password')
     data = request.get_json()
