@@ -77,3 +77,30 @@ class BooksDAO:
         db.session.delete(book)
         db.session.commit()
         return True
+    
+    def export_data(self):
+        """Export data"""
+        books = self.model.query.all()
+        author = Author.query.all()
+
+        # Serialize the query results
+        if not books:
+            return False
+        schemabook = BooksSchema(many=True)
+        books = schemabook.dump(books)
+
+        # Serialize the query results
+        if not author:
+            return False
+        schemaauthor = BooksSchema(many=True)
+        author = schemaauthor.dump(author)
+
+        # get books for each author with many to many relationship
+
+        # create dict with pandas
+        data = {
+            'books': books,
+            'authors': author,
+        }
+        print(data)
+        return data

@@ -19,3 +19,6 @@ class CallBooksServices:
     
     def get_by_id(self, id):
         return self.dao.get_by_id(id)
+    
+    def export_data(self):
+        return self.dao.export_data()

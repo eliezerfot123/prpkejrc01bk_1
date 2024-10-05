@@ -18,3 +18,6 @@ class BooksController:
     
     def get_by_id(self, book_id):
         return self.call_books_services.get_by_id(book_id)
+    
+    def export_data(self):
+        return self.call_books_services.export_data()
