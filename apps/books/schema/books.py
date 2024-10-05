@@ -1,5 +1,6 @@
 from marshmallow import Schema, fields
 
+
 class BooksSchema(Schema):
     title = fields.Str()
     description = fields.Str()
@@ -10,4 +11,3 @@ class BooksSchema(Schema):
 
     class Meta:
         fields = ("title", "description", "image_url", "category", "user_id", "authors")
-        

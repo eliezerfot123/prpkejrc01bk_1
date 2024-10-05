@@ -1,5 +1,6 @@
 from apps.books.dao.author import AuthorDAO
 
+
 class CallAuthorServices:
 
     def __init__(self):
@@ -7,7 +8,7 @@ class CallAuthorServices:
 
     def execute(self):
         return self.dao.get_all()
-    
+
     def create_data(self, request_data):
         return self.dao.create(**request_data)
 

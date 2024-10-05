@@ -2,7 +2,9 @@
 """Database module, including the SQLAlchemy database object and DB-related utilities."""
 from datetime import datetime
 from typing import Optional, Type, TypeVar
-from sqlalchemy import Column, Integer, DateTime
+
+from sqlalchemy import Column, DateTime, Integer
+
 from .compat import basestring
 from .extensions import db
 
@@ -81,6 +83,7 @@ class BaseModel(PkModel):
     def __init__(self, **kwargs):
         for key, value in kwargs.items():
             setattr(self, key, value)
+
 
 def reference_col(
     tablename, nullable=False, pk_name="id", foreign_key_kwargs=None, column_kwargs=None

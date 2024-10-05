@@ -1,9 +1,11 @@
-from qaroni.database import db
-from sqlalchemy.orm import Session
 from flask import make_response
+from sqlalchemy.orm import Session
+from werkzeug.security import check_password_hash, generate_password_hash
+
 from apps.user.models import User
-from werkzeug.security import generate_password_hash, check_password_hash
+from qaroni.database import db
 from qaroni.extensions import bcrypt
+
 
 class LoginUserDAO:
     def __init__(self) -> None:
@@ -24,7 +26,7 @@ class LoginUserDAO:
             # returns 401 if user does not exist
             return False
         # validate with check_password_hash method
-        #if check_password_hash(user.password, password):
+        # if check_password_hash(user.password, password):
         #    return user
         elif user != None:
             return user

@@ -1,11 +1,12 @@
 # -*- coding: utf-8 -*-
 """User views."""
 import io
-from flask import Blueprint, request, jsonify, make_response
-from apps.books.controllers import BooksController
-from flask_jwt_extended import jwt_required
-import pandas as pd
 
+import pandas as pd
+from flask import Blueprint, jsonify, make_response, request
+from flask_jwt_extended import jwt_required
+
+from apps.books.controllers import BooksController
 
 books_blueprint_api = Blueprint("books", __name__)
 
@@ -28,23 +29,25 @@ def get_books():
               type: string
     """
     try:
-        #books = Books().get_all()
+        # books = Books().get_all()
         ctrl = BooksController()
         books = ctrl.execute()
 
-        return jsonify({
-            "message": "successfully retrieved all books",
-            "data": books
-        })
+        return jsonify({"message": "successfully retrieved all books", "data": books})
     except Exception as e:
-        return jsonify({
-            "message": "failed to retrieve all books",
-            "error": str(e),
-            "data": None
-        }), 500
+        return (
+            jsonify(
+                {
+                    "message": "failed to retrieve all books",
+                    "error": str(e),
+                    "data": None,
+                }
+            ),
+            500,
+        )
 
 
-@books_blueprint_api.route('/api/books/', methods=['POST'])
+@books_blueprint_api.route("/api/books/", methods=["POST"])
 @jwt_required()
 def create_book():
     """
@@ -97,28 +100,28 @@ def create_book():
     """
     data = request.get_json()
     if not data:
-        return jsonify({'message': 'No input data provided'}), 400
-    
+        return jsonify({"message": "No input data provided"}), 400
+
     ctrl = BooksController()
     result = ctrl.create_data(data)
     if result is None:
-        return jsonify({'message': 'Book already exists'}), 400
-    
-    return jsonify({'message': 'Book created successfully'}), 201
+        return jsonify({"message": "Book already exists"}), 400
+
+    return jsonify({"message": "Book created successfully"}), 201
 
 
-@books_blueprint_api.route('/api/books/<int:book_id>/', methods=['PUT'])
+@books_blueprint_api.route("/api/books/<int:book_id>/", methods=["PUT"])
 @jwt_required()
 def update_book(book_id):
     """
     Update a book by id.
-    
+
     Args:
         book_id (int): Book id
-    
+
     Returns:
         dict: A dict with a message indicating if the book was updated or not
-    
+
     Status Codes:
         200 OK: If the book was updated successfully
         400 Bad Request: If the book does not exist
@@ -177,28 +180,28 @@ def update_book(book_id):
     """
     data = request.get_json()
     if not data:
-        return jsonify({'message': 'No input data provided'}), 400
-    
+        return jsonify({"message": "No input data provided"}), 400
+
     ctrl = BooksController()
     result = ctrl.update_data(book_id, data)
     if result is None or result is False:
-        return jsonify({'message': 'Book does not exist'}), 400
-    
-    return jsonify({'message': 'Book updated successfully'}), 200
+        return jsonify({"message": "Book does not exist"}), 400
+
+    return jsonify({"message": "Book updated successfully"}), 200
 
 
-@books_blueprint_api.route('/api/books/<int:book_id>/', methods=['DELETE'])
+@books_blueprint_api.route("/api/books/<int:book_id>/", methods=["DELETE"])
 @jwt_required()
 def delete_book(book_id):
     """
     Delete a book by id.
-    
+
     Args:
         book_id (int): Book id
-    
+
     Returns:
         dict: A dict with a message indicating if the book was deleted or not
-    
+
     Status Codes:
         200 OK: If the book was deleted successfully
         400 Bad Request: If the book does not exist
@@ -230,12 +233,12 @@ def delete_book(book_id):
     ctrl = BooksController()
     result = ctrl.delete_data(book_id)
     if result is None or result is False:
-        return jsonify({'message': 'Book does not exist'}), 400
-    
-    return jsonify({'message': 'Book deleted successfully'}), 200
+        return jsonify({"message": "Book does not exist"}), 400
+
+    return jsonify({"message": "Book deleted successfully"}), 200
 
 
-@books_blueprint_api.route('/api/books/<int:book_id>/', methods=['GET'])
+@books_blueprint_api.route("/api/books/<int:book_id>/", methods=["GET"])
 def get_book(book_id):
     """
     Get book by id
@@ -262,11 +265,12 @@ def get_book(book_id):
     ctrl = BooksController()
     book = ctrl.get_by_id(book_id)
     if book is None:
-        return jsonify({'message': 'Book does not exist'}), 400
-    
+        return jsonify({"message": "Book does not exist"}), 400
+
     return jsonify(book)
 
-@books_blueprint_api.route('/api/export/')
+
+@books_blueprint_api.route("/api/export/")
 def export_books():
     """
     Export books data to an Excel file.
@@ -283,17 +287,17 @@ def export_books():
         books = ctrl.export_data()
 
         if not books:  # Handle empty data case (optional)
-            return jsonify({'message': 'No books found for export.'}), 404
+            return jsonify({"message": "No books found for export."}), 404
 
         # Create DataFrame and BytesIO object
-        df = pd.DataFrame(books['books'])
+        df = pd.DataFrame(books["books"])
         output = io.BytesIO()
 
         # Use Pandas' ExcelWriter with 'xlsxwriter' engine
-        writer = pd.ExcelWriter(output, engine='xlsxwriter')
+        writer = pd.ExcelWriter(output, engine="xlsxwriter")
 
         # Write DataFrame to Excel
-        df.to_excel(writer, sheet_name='Hoja1', index=False)
+        df.to_excel(writer, sheet_name="Hoja1", index=False)
         writer._save()  # Correct way to save the workbook
 
         # Create HTTP response for download
@@ -305,4 +309,7 @@ def export_books():
 
     except Exception as e:  # Catch generic exceptions for better error handling
         print(f"An error occurred during export: {e}")
-        return jsonify({'message': 'An error occurred while exporting Excel.'}), 500  # Inform user with an appropriate status code
+        return (
+            jsonify({"message": "An error occurred while exporting Excel."}),
+            500,
+        )  # Inform user with an appropriate status code

@@ -1,12 +1,13 @@
 from apps.books.services.author_services import CallAuthorServices
 
+
 class AuthorsController:
     def __init__(self):
         self.call_author_services = CallAuthorServices()
 
     def get_all(self):
         return self.call_author_services.execute()
-    
+
     def create_data(self, request_data):
         return self.call_author_services.create_data(request_data)
 

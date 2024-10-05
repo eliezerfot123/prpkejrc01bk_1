@@ -4,11 +4,10 @@ import datetime as dt
 
 from flask_login import UserMixin
 from sqlalchemy.ext.hybrid import hybrid_property
+from werkzeug.security import check_password_hash, generate_password_hash
 
-from qaroni.database import Column, BaseModel, db, relationship, reference_col
+from qaroni.database import BaseModel, Column, db, reference_col, relationship
 from qaroni.extensions import bcrypt
-from werkzeug.security import generate_password_hash, check_password_hash
-
 
 
 class User(UserMixin, BaseModel):
@@ -49,4 +48,3 @@ class User(UserMixin, BaseModel):
     def __repr__(self):
         """Represent instance as a unique string."""
         return f"<User({self.email!r})>"
-

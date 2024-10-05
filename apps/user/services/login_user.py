@@ -1,5 +1,6 @@
 from apps.user.dao import LoginUserDAO
 
+
 class CallUserLoginServices:
     def __init__(self):
         self.dao = LoginUserDAO()

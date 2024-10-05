@@ -1,7 +1,9 @@
-from qaroni.database import db
 from sqlalchemy.orm import Session
-from apps.books.models import Book, Author
+
+from apps.books.models import Author, Book
 from apps.books.schema.books import BooksSchema
+from qaroni.database import db
+
 
 class BooksDAO:
     def __init__(self):
@@ -21,34 +23,36 @@ class BooksDAO:
 
     def create(self, **kwargs):
         """Create a new book"""
-        import ipdb; ipdb.set_trace()
-        pop_author = kwargs.pop('authors')
+        import ipdb
+
+        ipdb.set_trace()
+        pop_author = kwargs.pop("authors")
         schema = BooksSchema()
         book = self.model(
-            title=schema.load(kwargs)['title'],
-            description=schema.load(kwargs)['description'],
-            image_url=schema.load(kwargs)['image_url'],
-            category=schema.load(kwargs)['category'],
-            user_id=schema.load(kwargs)['user_id'],
+            title=schema.load(kwargs)["title"],
+            description=schema.load(kwargs)["description"],
+            image_url=schema.load(kwargs)["image_url"],
+            category=schema.load(kwargs)["category"],
+            user_id=schema.load(kwargs)["user_id"],
         )
 
-        # save m2m authors 
+        # save m2m authors
         for author in pop_author:
             author = Author.query.filter_by(id=author).first()
             book.authors.append(author)
-        
+
         # save book
         db.session.add(book)
         db.session.commit()
         return book
-    
+
     def update(self, id: int, **kwargs) -> bool:
         """Update a book with a particular id, and edit the authors"""
         book = self.model.query.get(id)
         if book is None:
             return False
 
-        authors = kwargs.pop('authors', [])
+        authors = kwargs.pop("authors", [])
 
         for key, value in kwargs.items():
             setattr(book, key, value)
@@ -59,7 +63,6 @@ class BooksDAO:
         book.save()
         return True
 
-    
     def get_by_id(self, id):
         """Get book by id"""
         book = self.model.query.filter_by(id=id).first()
@@ -68,7 +71,7 @@ class BooksDAO:
         schema = BooksSchema()
         book = schema.dump(book)
         return book
-    
+
     def delete(self, id):
         """Delete a book by id"""
         book = self.model.query.get(id)
@@ -77,7 +80,7 @@ class BooksDAO:
         db.session.delete(book)
         db.session.commit()
         return True
-    
+
     def export_data(self):
         """Export data"""
         books = self.model.query.all()
@@ -99,8 +102,8 @@ class BooksDAO:
 
         # create dict with pandas
         data = {
-            'books': books,
-            'authors': author,
+            "books": books,
+            "authors": author,
         }
         print(data)
         return data

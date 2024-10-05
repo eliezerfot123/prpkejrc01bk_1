@@ -1,14 +1,13 @@
 # -*- coding: utf-8 -*-
 """User views."""
 import jwt
-from flask import Blueprint, request, jsonify
-from qaroni.logs import log_info
-from apps.user.controllers import RegisterUserController, LoginUserController
-from qaroni.handler_error import HandlerException
-from apps.user.models import User
-from flask_jwt_extended import create_access_token
-from flask_jwt_extended import jwt_required
+from flask import Blueprint, jsonify, request
+from flask_jwt_extended import create_access_token, jwt_required
 
+from apps.user.controllers import LoginUserController, RegisterUserController
+from apps.user.models import User
+from qaroni.handler_error import HandlerException
+from qaroni.logs import log_info
 
 users_blueprint_api = Blueprint("users", __name__)
 
@@ -90,7 +89,6 @@ def register():
     return HandlerException.STATUS200(result)
 
 
-
 @users_blueprint_api.route("/api/accounts/login/", methods=["POST"])
 def login():
     """Login user
@@ -123,24 +121,22 @@ def login():
             200:
               type: object
     """
-    email = request.json.get('email')
-    password = request.json.get('password')
+    email = request.json.get("email")
+    password = request.json.get("password")
     data = request.get_json()
 
     if not email:
-        return jsonify({'message': 'Email is required'}), 400
+        return jsonify({"message": "Email is required"}), 400
     if not password:
-        return jsonify({'message': 'Password is required'}), 400
-    
+        return jsonify({"message": "Password is required"}), 400
+
     call = LoginUserController()
     result = call.execute(data)
     if not result:
-        return jsonify({'message': 'Invalid credentials'}), 400
+        return jsonify({"message": "Invalid credentials"}), 400
     else:
         access_token = create_access_token(identity=email)
-        return jsonify({'access_token': access_token}), 200
-
-
+        return jsonify({"access_token": access_token}), 200
 
 
 @users_blueprint_api.route("/actuator/health", methods=["GET"])

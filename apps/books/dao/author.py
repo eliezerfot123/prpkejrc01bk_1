@@ -2,6 +2,7 @@ from apps.books.models import Author
 from apps.books.schema.author import AuthorSchema
 from qaroni.database import db
 
+
 class AuthorDAO:
     def __init__(self):
         self.model = Author
@@ -10,18 +11,20 @@ class AuthorDAO:
         """Get all authors"""
         schema = AuthorSchema(many=True)
         authors = schema.dump(self.model.query.all())
-        
+
         return authors
-    
+
     def create(self, **kwargs):
         """Create a new author"""
         # save author
-        import ipdb; ipdb.set_trace()
-        author = self.model(name=kwargs['name'])
+        import ipdb
+
+        ipdb.set_trace()
+        author = self.model(name=kwargs["name"])
         db.session.add(author)
         db.session.commit()
         return author
-    
+
     def update(self, id, **kwargs):
         """Update a author with a particular id"""
         author = self.model.query.get(id)
@@ -31,7 +34,7 @@ class AuthorDAO:
             setattr(author, key, value)
         db.session.commit()
         return author
-    
+
     def delete(self, id):
         """Delete a author with a particular id"""
         author = self.model.query.get(id)
@@ -40,7 +43,7 @@ class AuthorDAO:
         db.session.delete(author)
         db.session.commit()
         return True
-    
+
     def get_by_id(self, id):
         """Get author by id"""
         author = self.model.query.get(id)

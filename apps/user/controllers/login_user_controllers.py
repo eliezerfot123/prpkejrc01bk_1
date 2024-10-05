@@ -1,5 +1,6 @@
 from apps.user.services.login_user import CallUserLoginServices
 
+
 class LoginUserController:
     def __init__(self):
         self.call_user_services = CallUserLoginServices()

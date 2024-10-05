@@ -1,5 +1,6 @@
 from apps.user.dao import CreateUserDAO
 
+
 class CallUserRegisterServices:
 
     def __init__(self):
