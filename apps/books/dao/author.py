@@ -17,9 +17,6 @@ class AuthorDAO:
     def create(self, **kwargs):
         """Create a new author"""
         # save author
-        import ipdb
-
-        ipdb.set_trace()
         author = self.model(name=kwargs["name"])
         db.session.add(author)
         db.session.commit()

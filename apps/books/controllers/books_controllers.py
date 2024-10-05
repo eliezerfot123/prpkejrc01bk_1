@@ -22,3 +22,6 @@ class BooksController:
 
     def export_data(self):
         return self.call_books_services.export_data()
+    
+    def get_by_author(self, author_id):
+        return self.call_books_services.get_by_author(author_id)

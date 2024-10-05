@@ -270,6 +270,37 @@ def get_book(book_id):
     return jsonify(book)
 
 
+@books_blueprint_api.route("/api/books/author/<int:author_id>/", methods=["GET"])
+def get_books_by_author(author_id):
+    """
+    Get books by author id
+    ---
+    tags:
+      - Get books by author id
+    parameters:
+    - in: path
+      name: author_id
+      description: id of the author
+      schema:
+        type: integer
+      required: true
+    responses:
+      200:
+        description: Books retrieved successfully
+        schema:
+          type: object
+      400:
+        description: Author does not exist
+        schema:
+          $ref: '#/definitions/ErrorResponseSchema'
+    """
+    ctrl = BooksController()
+    books = ctrl.get_by_author(author_id)
+    if books is None:
+        return jsonify({"message": "Author does not exist"}), 400
+
+    return jsonify(books)
+
 @books_blueprint_api.route("/api/export/")
 def export_books():
     """

@@ -22,3 +22,6 @@ class CallBooksServices:
 
     def export_data(self):
         return self.dao.export_data()
+
+    def get_by_author(self, author_id):
+        return self.dao.get_by_author_id(author_id)
