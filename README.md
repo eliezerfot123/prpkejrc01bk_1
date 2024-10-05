@@ -9,34 +9,14 @@ There are three main services:
 To run the development version of the app
 
 ```bash
-docker compose up flask-dev
+docker compose -f docker-compose.yml build --no-cache
 ```
 
 To run the production version of the app
 
 ```bash
-docker compose up flask-prod
+docker compose -f docker-compose.yml up -d 
 ```
-
-The list of `environment:` variables in the `docker compose.yml` file takes precedence over any variables specified in `.env`.
-
-To run any commands using the `Flask CLI`
-
-```bash
-docker compose run --rm manage <<COMMAND>>
-```
-
-Therefore, to initialize a database you would run
-
-```bash
-docker compose run --rm manage db init
-docker compose run --rm manage db migrate
-docker compose run --rm manage db upgrade
-```
-
-A docker volume `node-modules` is created to store NPM packages and is reused across the dev and prod versions of the application. For the purposes of DB testing with `sqlite`, the file `dev.db` is mounted to all containers. This volume mount should be removed from `docker compose.yml` if a production DB server is used.
-
-Go to `http://localhost:8080`. You will see a pretty welcome screen.
 
 ### Running locally
 
