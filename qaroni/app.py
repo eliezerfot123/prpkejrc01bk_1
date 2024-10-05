@@ -17,7 +17,9 @@ from qaroni.extensions import (
 )
 
 from apps.user.views import users_blueprint_api
-from apps.books.views import books_blueprint_api
+from apps.books.views.books import books_blueprint_api
+from apps.books.views.authors import authors_blueprint_api
+
 from flasgger import Swagger
 from qaroni.swagger_template import template as swagger_template
 
@@ -68,6 +70,7 @@ def register_blueprints(app):
     """Register Flask blueprints."""
     app.register_blueprint(users_blueprint_api)
     app.register_blueprint(books_blueprint_api)
+    app.register_blueprint(authors_blueprint_api)
     return None
 
 

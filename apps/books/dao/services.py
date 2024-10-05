@@ -68,3 +68,12 @@ class BooksDAO:
         schema = BooksSchema()
         book = schema.dump(book)
         return book
+    
+    def delete(self, id):
+        """Delete a book by id"""
+        book = self.model.query.get(id)
+        if not book:
+            return False
+        db.session.delete(book)
+        db.session.commit()
+        return True

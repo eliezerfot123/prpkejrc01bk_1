@@ -46,7 +46,7 @@ class Author(BaseModel):
     name = Column(db.String(80), nullable=False)
 
     def __init__(self, name: str):
-        return self.name
+        self.name = name
     
     def serialize(self):
         return {

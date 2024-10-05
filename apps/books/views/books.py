@@ -75,3 +75,28 @@ def update_book(book_id):
         return jsonify({'message': 'Book does not exist'}), 400
     
     return jsonify({'message': 'Book updated successfully'}), 200
+
+
+@books_blueprint_api.route('/api/books/<int:book_id>/', methods=['DELETE'])
+@jwt_required()
+def delete_book(book_id):
+    # Lógica para borrar un libro
+    
+    ctrl = BooksController()
+    result = ctrl.delete_data(book_id)
+    if result is None or result is False:
+        return jsonify({'message': 'Book does not exist'}), 400
+    
+    return jsonify({'message': 'Book deleted successfully'}), 200
+
+
+@books_blueprint_api.route('/api/books/<int:book_id>/', methods=['GET'])
+def get_book(book_id):
+    # Lógica para obtener un libro
+    
+    ctrl = BooksController()
+    book = ctrl.get_by_id(book_id)
+    if book is None:
+        return jsonify({'message': 'Book does not exist'}), 400
+    
+    return jsonify(book)
