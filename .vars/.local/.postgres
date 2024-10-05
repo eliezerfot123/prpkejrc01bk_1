@@ -1,0 +1,7 @@
+# PostgreSQL
+# ------------------------------------------------------------------------------
+POSTGRES_HOST=database
+POSTGRES_PORT=5432
+POSTGRES_DB=qaroni
+POSTGRES_USER=NIqpbzrbpNYQqBCVQBvckwtVzLMJSypP
+POSTGRES_PASSWORD=5xuHpLMGgKbHBzDQ2w2y8kkdm9fxD2ldq6TrJ4E3hpa6IcbPkl3GWjHUcXsurxf8

@@ -3,19 +3,17 @@
 import logging
 import sys
 
-from flask import Flask, render_template
 from environs import Env
-from qaroni import commands
-from apps.user import *
-from qaroni.extensions import (
-    bcrypt,
-    cache,
-    db,
-    migrate,
-    mail
-)
+from flasgger import Swagger
+from flask import Flask, render_template
 
+from apps.books.views.authors import authors_blueprint_api
+from apps.books.views.books import books_blueprint_api
+from apps.user import *
 from apps.user.views import users_blueprint_api
+from qaroni import commands
+from qaroni.extensions import bcrypt, cache, db, jwt, mail, migrate
+from qaroni.swagger_template import template as swagger_template
 
 
 def create_app(config_object="qaroni.settings"):
@@ -35,6 +33,7 @@ def create_app(config_object="qaroni.settings"):
     app.config["MAIL_PASSWORD"] = env.str("MAIL_PASSWORD")
     app.config["MAIL_USE_TLS"] = env.bool("MAIL_USE_TLS")
     app.config["MAIL_USE_SSL"] = env.bool("MAIL_USE_SSL")
+    app.config["JWT_SECRET_KEY"] = env.str("JWT_SECRET_KEY")
 
     register_extensions(app)
     register_blueprints(app)
@@ -52,12 +51,16 @@ def register_extensions(app):
     bcrypt.init_app(app)
     migrate.init_app(app, db)
     mail.init_app(app)
+    jwt.init_app(app)
+    Swagger(app, template=swagger_template)
     return None
 
 
 def register_blueprints(app):
     """Register Flask blueprints."""
     app.register_blueprint(users_blueprint_api)
+    app.register_blueprint(books_blueprint_api)
+    app.register_blueprint(authors_blueprint_api)
     return None
 
 
