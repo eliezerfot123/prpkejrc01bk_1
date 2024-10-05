@@ -122,6 +122,58 @@ def update_book(book_id):
     Status Codes:
         200 OK: If the book was updated successfully
         400 Bad Request: If the book does not exist
+
+    ---
+    tags:
+      - Update book
+    consumes:
+      - application/json
+    parameters:
+      - in: path
+        name: book_id
+        description: id of the book
+        schema:
+          type: integer
+        required: true
+      - in: body
+        name: body
+        description: Book data
+        schema:
+          type: object
+          properties:
+            title:
+              type: string
+            description:
+              type: string
+            image_url:
+              type: string
+            category:
+              type: string
+            user_id:
+              type: string
+            authors:
+              type: array
+              items:
+                type: string
+        example:
+          title: "Don Quijote de la Mancha"
+          description: "Novela del escritor espa ol Miguel de Cervantes"
+          image_url: "https://example.com/book.jpg"
+          category: "Novela"
+          user_id: "8a1b8c9d-0a1b-2c3d-4e5f-6a7b8c9d0a1b"
+          authors: ["Miguel de Cervantes Saavedra"]
+    responses:
+      200:
+        message: Book updated successfully
+        schema:
+          id: SimpleResponseSchema
+          properties:
+            message:
+              type: string
+      400:
+        description: Bad request or missing parameters.
+        schema:
+          $ref: '#/definitions/ErrorResponseSchema'
     """
     data = request.get_json()
     if not data:
@@ -150,6 +202,30 @@ def delete_book(book_id):
     Status Codes:
         200 OK: If the book was deleted successfully
         400 Bad Request: If the book does not exist
+    ---
+    tags:
+      - Delete book
+    consumes:
+      - application/json
+    parameters:
+      - in: path
+        name: book_id
+        description: id of the book
+        schema:
+          type: integer
+        required: true
+    responses:
+      200:
+        message: Book deleted successfully
+        schema:
+          id: SimpleResponseSchema
+          properties:
+            message:
+              type: string
+      400:
+        description: Bad request or missing parameters.
+        schema:
+          $ref: '#/definitions/ErrorResponseSchema'
     """
     ctrl = BooksController()
     result = ctrl.delete_data(book_id)
