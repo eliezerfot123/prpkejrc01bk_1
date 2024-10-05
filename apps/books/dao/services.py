@@ -23,9 +23,6 @@ class BooksDAO:
 
     def create(self, **kwargs):
         """Create a new book"""
-        import ipdb
-
-        ipdb.set_trace()
         pop_author = kwargs.pop("authors")
         schema = BooksSchema()
         book = self.model(
@@ -107,3 +104,14 @@ class BooksDAO:
         }
         print(data)
         return data
+    
+    def get_by_author_id(self, author_id):
+        """Get books by author id"""
+        author = Author.query.filter_by(id=author_id).first()
+        books = author.books
+        
+        if not books:
+            return False
+        schema = BooksSchema(many=True)
+        books = schema.dump(books)
+        return books
