@@ -95,7 +95,6 @@ supervisor==4.2.5
 traitlets==5.14.3
 typing_extensions==4.12.2
 tzdata==2024.2
-uWSGI==2.0.27
 waitress==3.0.0
 wcwidth==0.2.13
 WebOb==1.8.8
