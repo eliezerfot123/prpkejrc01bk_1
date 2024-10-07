@@ -11,18 +11,18 @@ RUN mkdir $APP
 WORKDIR $APP
 # Copy the requirements file in order to install
 # Python dependencies
-COPY requirements/ .
+COPY . .
 
 # Install Python dependencies
 RUN pip install -r requirements/base.txt
-# We copy the rest of the codebase into the image
-COPY . .
+
 # Finally, we run uWSGI with the ini file we
 # created earlier
 EXPOSE 5000
 
-#CMD [ "executable" ] [ "flask", "run","--host","0.0.0.0","--port","5000"]
+#CMD [ "flask", "run"]
 # Make Entrypoint executable
-RUN chmod +x entrypoint.sh
+#RUN chmod +x entrypoint.sh
 
-CMD ["/bin/bash", "entrypoint.sh"]
+ENTRYPOINT ["/bin/bash", "entrypoint.sh"]
+CMD ["uwsgi", "--ini", "uwsgi.ini"]
