@@ -54,6 +54,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - env:
-        OUTPUT1: ${{ needs.validate-and-build.outputs.release }}
-        OUTPUT2: ${{ needs.validate-and-build.outputs.build-command }}
-        run: echo "$OUTPUT1 $OUTPUT1"
+          OUTPUT1: ${{ needs.validate-and-build.outputs.release }}
+          OUTPUT2: ${{ needs.validate-and-build.outputs.build-command }}
+        run: echo "$OUTPUT1 $OUTPUT2"
